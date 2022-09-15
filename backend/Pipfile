@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "4.0.x"
+psycopg2-binary = "2.9.x"
+djangorestframework-simplejwt = "5.0.x"
+django-cors-headers = "3.11.x"
+django-filter = "21.1.x"
+
+[dev-packages]
+pre-commit = "2.17.x"
+
+[requires]
+python_version = "3"

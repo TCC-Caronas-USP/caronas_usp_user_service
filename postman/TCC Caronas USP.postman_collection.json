@@ -1,0 +1,100 @@
+{
+	"info": {
+		"_postman_id": "c2b08e47-4bee-4328-8fe0-bb366453daf9",
+		"name": "TCC Caronas USP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16363388"
+	},
+	"item": [
+		{
+			"name": "Vehicle",
+			"item": [
+				{
+					"name": "Get Vehicle",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8551/vehicle/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8551",
+							"path": [
+								"vehicle",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Vehicle",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8551/vehicle/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8551",
+							"path": [
+								"vehicle",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Rider",
+			"item": [
+				{
+					"name": "Get Rider",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8551/rider/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8551",
+							"path": [
+								"rider",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Rider",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8551/rider/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8551",
+							"path": [
+								"rider",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

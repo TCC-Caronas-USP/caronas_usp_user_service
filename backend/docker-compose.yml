@@ -1,0 +1,76 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - 5432
+    container_name: tcc_user_service_db
+    volumes:
+      - "db_data:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_DB=user_service
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - user_service
+
+  app:
+    container_name: tcc_user_service
+    build: .
+    volumes:
+      - .:/usr/src/app
+    restart: always
+    ports:
+      - "8551:8000"
+    command: >
+      sh -c "pipenv run python manage.py migrate &&
+             pipenv run python manage.py runserver 0.0.0.0:8000"
+    environment:
+      - DB_NAME=user_service
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DEBUG=True
+    profiles:
+      - dev
+    depends_on:
+      - db
+    networks:
+      - user_service
+
+  app-debug:
+    container_name: tcc_user_service
+    build: .
+    volumes:
+      - .:/usr/src/app
+    restart: always
+    ports:
+      - "8551:8000"
+      - 5679:5679
+    command: >
+      sh -c "pipenv run python manage.py migrate &&
+            pipenv run python -m pip install debugpy -t /tmp &&
+            pipenv run python /tmp/debugpy --wait-for-client --listen 0.0.0.0:5679 manage.py runserver 0.0.0.0:8000 --nothreading --noreload"
+    environment:
+      - DB_NAME=user_service
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DEBUG=True
+    profiles:
+      - debug
+    depends_on:
+      - db
+    networks:
+      - user_service
+
+volumes:
+  db_data:
+
+networks:
+  user_service:
+    driver: bridge
