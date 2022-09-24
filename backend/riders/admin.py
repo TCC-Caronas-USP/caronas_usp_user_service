@@ -16,7 +16,6 @@ class VehicleAdmin(admin.ModelAdmin):
 class RiderAdmin(admin.ModelAdmin):
 
     list_display = ('email',
-                    'cpf',
                     'telefone',
                     'instituto',
                     'rides_as_driver',

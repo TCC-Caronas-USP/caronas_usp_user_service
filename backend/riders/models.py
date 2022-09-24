@@ -2,10 +2,12 @@ from django.db import models
 
 
 class Rider(models.Model):
-    email = models.CharField(max_length=255, blank=False, null=False)
-    cpf = models.CharField(max_length=20, null=True, blank=True)
-    telefone = models.CharField(max_length=20, null=True, blank=True)
-    instituto = models.CharField(max_length=30, null=True, blank=True)
+    name = models.CharField(max_length=255, blank=False)
+    email = models.EmailField(max_length=255, unique=True, blank=False)
+    telefone = models.CharField(max_length=20, blank=False)
+    instituto = models.CharField(max_length=30, blank=False)
+    curso = models.CharField(max_length=30, blank=False)
+    ano = models.PositiveIntegerField(blank=False)
     rides_as_driver = models.PositiveIntegerField(default=0)
     rides_as_passenger = models.PositiveIntegerField(default=0)
     ranking = models.FloatField(default=0)
