@@ -14,7 +14,7 @@ class VehicleRepository:
 class RiderRepository:
 
     def find_by_email(self, email):
-        return list(Rider.objects.filter(email=email))
+        return Rider.objects.get(email=email)
 
     def create(self, **rider_data):
         rider = Rider.objects.create(**rider_data)
