@@ -6,8 +6,17 @@ urlpatterns = [
         'vehicle/',
         VehicleView.as_view(
             actions={
-                'get': 'get',
-                'post': 'post',
+                'post': 'create',
+            }
+        ),
+    ),
+    path(
+        'vehicle/<int:pk>',
+        VehicleView.as_view(
+            actions={
+                'get': 'retrieve',
+                'patch': 'partial_update',
+                'delete': 'destroy'
             }
         ),
     ),
@@ -15,8 +24,17 @@ urlpatterns = [
         'rider/',
         RiderView.as_view(
             actions={
-                'get': 'get',
-                'post': 'post',
+                'post': 'create',
+            }
+        ),
+    ),
+    path(
+        'rider/<int:pk>',
+        RiderView.as_view(
+            actions={
+                'get': 'retrieve',
+                'patch': 'partial_update',
+                'delete': 'destroy'
             }
         ),
     ),
