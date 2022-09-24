@@ -15,6 +15,35 @@
 						"method": "GET",
 						"header": [],
 						"url": {
+							"raw": "http://localhost:8551/vehicle/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8551",
+							"path": [
+								"vehicle",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Vehicle",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"model\": \"Model T\",\r\n    \"color\": \"Preto\",\r\n    \"brand\": \"Ford\",\r\n    \"license_plate\": \"0000001\",\r\n    \"rider\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
 							"raw": "http://localhost:8551/vehicle/",
 							"protocol": "http",
 							"host": [
@@ -30,12 +59,21 @@
 					"response": []
 				},
 				{
-					"name": "Post Vehicle",
+					"name": "Update Vehicle",
 					"request": {
-						"method": "POST",
+						"method": "PATCH",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"color\": \"Branco\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost:8551/vehicle/",
+							"raw": "http://localhost:8551/vehicle/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -43,7 +81,7 @@
 							"port": "8551",
 							"path": [
 								"vehicle",
-								""
+								"1"
 							]
 						}
 					},
@@ -60,6 +98,35 @@
 						"method": "GET",
 						"header": [],
 						"url": {
+							"raw": "http://localhost:8551/rider/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8551",
+							"path": [
+								"rider",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Rider",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Gabriel M Desiderá\",\r\n    \"email\": \"gabriel.desidera@usp.br\",\r\n    \"telefone\": \"(11) 997749308\",\r\n    \"instituto\": \"Poli\",\r\n    \"curso\": \"Eng Elétrica\",\r\n    \"ano\": 2017\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
 							"raw": "http://localhost:8551/rider/",
 							"protocol": "http",
 							"host": [
@@ -75,12 +142,21 @@
 					"response": []
 				},
 				{
-					"name": "Post Rider",
+					"name": "Update Rider",
 					"request": {
-						"method": "POST",
+						"method": "PATCH",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"telefone\": \"(21) 1111111\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost:8551/rider/",
+							"raw": "http://localhost:8551/rider/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -88,7 +164,27 @@
 							"port": "8551",
 							"path": [
 								"rider",
-								""
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Rider",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8551/rider/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8551",
+							"path": [
+								"rider",
+								"1"
 							]
 						}
 					},
