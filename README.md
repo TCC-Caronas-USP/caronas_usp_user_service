@@ -21,6 +21,19 @@
 - `pipenv run python manage.py migrate`
 - `pipenv run python manage.py runserver`
 
+### Comandos úteis
+
+#### Para abrir um terminal dentro do container:
+- `docker exec -it tcc_user_service bash`
+
+#### Para criar as migrações:
+- `docker exec -it tcc_user_service pipenv run python manage.py makemigrations`
+(se estiver usando o terminal dentro do container, n precisa colocar o `docker exec -it tcc_user_service` no começo)
+
+#### Para reverter as migrações:
+- `docker exec -it tcc_user_service pipenv run python manage.py migrate riders zero`
+(se estiver usando o terminal dentro do container, n precisa colocar o `docker exec -it tcc_user_service` no começo)
+
 ### Docker
 
 1. Duplicate the `.env.sample` file and rename it to `.env`, if you haven't done it yet.
@@ -38,7 +51,7 @@ docker-compose --profile=dev up --build -d
 docker exec -it tcc_user_service pipenv run python manage.py createsuperuser
 ```
 
-4. Point to http://localhost:8551
+4. Acessar http://localhost:8551/admin
 
 5. To stop and remove the containers, run:
 
