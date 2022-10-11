@@ -25,6 +25,7 @@ urlpatterns = [
         RiderView.as_view(
             actions={
                 'post': 'create',
+                'get': 'retrieve_self'
             }
         ),
     ),
