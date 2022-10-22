@@ -15,12 +15,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8551/vehicle/1",
-							"protocol": "http",
+							"raw": "{{server_url}}/vehicle/1",
 							"host": [
-								"localhost"
+								"{{server_url}}"
 							],
-							"port": "8551",
 							"path": [
 								"vehicle",
 								"1"
@@ -44,12 +42,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8551/vehicle/",
-							"protocol": "http",
+							"raw": "{{server_url}}/vehicle/",
 							"host": [
-								"localhost"
+								"{{server_url}}"
 							],
-							"port": "8551",
 							"path": [
 								"vehicle",
 								""
@@ -73,12 +69,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8551/vehicle/1",
-							"protocol": "http",
+							"raw": "{{server_url}}/vehicle/1",
 							"host": [
-								"localhost"
+								"{{server_url}}"
 							],
-							"port": "8551",
 							"path": [
 								"vehicle",
 								"1"
@@ -105,12 +99,10 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8551/rider",
-							"protocol": "http",
+							"raw": "{{server_url}}/rider",
 							"host": [
-								"localhost"
+								"{{server_url}}"
 							],
-							"port": "8551",
 							"path": [
 								"rider"
 							]
@@ -131,12 +123,10 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8551/rider/1",
-							"protocol": "http",
+							"raw": "{{server_url}}/rider/1",
 							"host": [
-								"localhost"
+								"{{server_url}}"
 							],
-							"port": "8551",
 							"path": [
 								"rider",
 								"1"
@@ -152,7 +142,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Gabriel M Desiderá\",\r\n    \"email\": \"gabriel.desidera@usp.br\",\r\n    \"telefone\": \"(11) 997749308\",\r\n    \"instituto\": \"Poli\",\r\n    \"curso\": \"Eng Elétrica\",\r\n    \"ano\": 2017,\r\n    \"uid\": \"BC4LRPepV1PMaUEVpRtFVGfQGLU2\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Gabriel M Desiderá\",\r\n    \"email\": \"{{email}}\",\r\n    \"telefone\": \"(11) 997749308\",\r\n    \"instituto\": \"Poli\",\r\n    \"curso\": \"Eng Elétrica\",\r\n    \"ano\": 2017,\r\n    \"uid\": \"{{uid}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -160,12 +150,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8551/rider/",
-							"protocol": "http",
+							"raw": "{{server_url}}/rider/",
 							"host": [
-								"localhost"
+								"{{server_url}}"
 							],
-							"port": "8551",
 							"path": [
 								"rider",
 								""
@@ -189,12 +177,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8551/rider/1",
-							"protocol": "http",
+							"raw": "{{server_url}}/rider/1",
 							"host": [
-								"localhost"
+								"{{server_url}}"
 							],
-							"port": "8551",
 							"path": [
 								"rider",
 								"1"
@@ -209,12 +195,10 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8551/rider/1",
-							"protocol": "http",
+							"raw": "{{server_url}}/rider/1",
 							"host": [
-								"localhost"
+								"{{server_url}}"
 							],
-							"port": "8551",
 							"path": [
 								"rider",
 								"1"
@@ -236,8 +220,9 @@
 							"script": {
 								"exec": [
 									"const responseJson = pm.response.json()\r",
-									"pm.environment.set(\"id_token\", responseJson.idToken)\r",
-									"pm.environment.set(\"refresh_token\", responseJson.refreshToken)"
+									"pm.collectionVariables.set(\"id_token\", responseJson.idToken)\r",
+									"pm.collectionVariables.set(\"refresh_token\", responseJson.refreshToken)\r",
+									"pm.collectionVariables.set(\"uid\", responseJson.localId)"
 								],
 								"type": "text/javascript"
 							}
@@ -328,18 +313,27 @@
 		},
 		{
 			"key": "email",
-			"value": "",
+			"value": "usuario-caronas-usp@email.com",
 			"type": "default"
 		},
 		{
 			"key": "password",
-			"value": "",
+			"value": "senha123",
 			"type": "secret"
 		},
 		{
 			"key": "API_KEY",
 			"value": "AIzaSyAkDzSqfu_L9INKNR__q2J8-Yr9gMwlsj8",
 			"type": "secret"
+		},
+		{
+			"key": "server_url",
+			"value": "http://localhost:8551",
+			"type": "string"
+		},
+		{
+			"key": "uid",
+			"value": "DyOya6DkfTf4XUovjr6Mu2K2iaI2"
 		}
 	]
 }
