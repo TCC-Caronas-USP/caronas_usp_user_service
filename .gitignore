@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 
 firebase-credentials.json
+requestsTCC.txt

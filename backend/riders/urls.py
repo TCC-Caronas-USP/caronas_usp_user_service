@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import VehicleView, RiderView
+
+from .views import RiderView, VehicleView, LocationView, RideView  # , PassengerView
 
 urlpatterns = [
     path(
@@ -39,4 +40,40 @@ urlpatterns = [
             }
         ),
     ),
+    path(
+        'rides/',
+        RideView.as_view(
+            actions={
+                'get': 'list',
+                'post': 'create'
+            }
+        )
+    ),
+    # path(
+    #     'rides/<int:pk>',
+    #     RideView.as_view( # A View de Rides precisa de uma correção para lidar com os PATCH
+    #         actions={
+    #             'patch': 'partial_update',
+    #             'delete': 'destroy'
+    #         }
+    #     )
+    # ),
+    # path(
+    #     'rides/driver',
+    #     RideView.as_view(
+    #         actions={
+    #             'get': '' # Retornar somente as Rides que possuem o id_driver do motorista
+    #         }
+    #     )
+    # ),
+    # TODO: Remover request de location/
+    path(
+        'location/',
+        LocationView.as_view(
+            actions={
+                'get': 'list',
+                'post': 'create',
+            }
+        )
+    )
 ]
