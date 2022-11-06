@@ -35,6 +35,11 @@ class RiderView(ModelViewSet):
         rider = get_current_rider(request)
         serializer = self.get_serializer(rider)
         return Response(serializer.data)
+        
+    def create(self, request, *args, **kwargs):
+        if 'uid' not in request.data:
+            request.data['uid'] = request.auth
+        return super().create(request, *args, **kwargs)
 
 
 class VehicleView(ModelViewSet):
