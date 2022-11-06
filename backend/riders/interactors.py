@@ -1,3 +1,6 @@
+from .models import Passenger
+
+
 class CreateVehicleInteractor:
 
     def __init__(self, vehicle_repository):
@@ -22,3 +25,12 @@ class CreateRiderInteractor:
     def execute(self):
         rider = self.rider_repository.create(**self.rider_data)
         return rider
+
+
+class GetPassengerInteractor:
+
+    def __init__(self) -> None:
+        self.passengers = Passenger.objects
+
+    def get_passenger(self, rider, ride):
+        return self.passengers.get(rider=rider.id, ride=ride)

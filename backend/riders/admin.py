@@ -51,8 +51,9 @@ class PassengerAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'ride',
-        'passenger',
-        'meeting_point'
+        'rider',
+        'meeting_point',
+        'status'
     )
 
 

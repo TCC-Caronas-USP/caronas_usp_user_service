@@ -53,15 +53,26 @@ class Ride(models.Model):
         Decimal('0.00'))], max_digits=4, decimal_places=2, null=False)
     max_passengers = models.PositiveIntegerField(null=False)
 
+    def get_passenger_count(self):
+        return self.passenger_set.count()
+
 
 class Passenger(models.Model):
+
+    class Status(models.IntegerChoices):
+        RECUSADO = 0
+        EM_ESPERA = 1
+        APROVADO = 2
+
     ride = models.ForeignKey(Ride, on_delete=models.CASCADE)
-    passenger = models.ForeignKey(Rider, on_delete=models.CASCADE)
-    meeting_point = models.ForeignKey(Location, on_delete=models.CASCADE)
+    rider = models.ForeignKey(Rider, on_delete=models.CASCADE)
+    meeting_point = models.OneToOneField('Location', on_delete=models.CASCADE)
+    status = models.IntegerField(
+        choices=Status.choices, null=False, default=Status.EM_ESPERA)
 
     class Meta:
         unique_together = (
-            ('ride', 'passenger'),
+            ('ride', 'rider'),
         )
         # constraints = [
         #     models.UniqueConstraint(

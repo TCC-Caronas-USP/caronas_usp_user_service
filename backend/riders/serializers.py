@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from .interactors import GetPassengerInteractor
 from .models import Rider, Vehicle, Location, Ride, Passenger
 
 
@@ -9,8 +10,6 @@ class VehicleSerializer(serializers.ModelSerializer):
         model = Vehicle
         fields = '__all__'
 
-# TODO: Trocar o nome para RiderPatchSerializer
-
 
 class RiderUpdateSerializer(serializers.ModelSerializer):
 
@@ -18,8 +17,6 @@ class RiderUpdateSerializer(serializers.ModelSerializer):
         model = Rider
         fields = '__all__'
         read_only_fields = ['email', 'name', 'vehicles']
-
-# TODO: Trocar o nome para RiderGetSerializer
 
 
 class RiderSerializer(serializers.ModelSerializer):
@@ -46,17 +43,38 @@ class RidePostSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class RideGetSerializer(serializers.ModelSerializer):
+# class PassengerGetSerializer(serializers.ModelSerializer):
+#     passenger = RiderSerializer(read_only=True)
+
+#     class Meta:
+#         model = Passenger
+#         fields = ['passenger', 'meeting_point']
+
+
+class RidesSerializer(serializers.ModelSerializer):
     driver = RiderSerializer(read_only=True)
     starting_point = LocationSerializer(read_only=True)
     ending_point = LocationSerializer(read_only=True)
+    status = serializers.SerializerMethodField('get_passenger_status')
+    passenger_count = serializers.IntegerField(source='get_passenger_count')
+
+    def __init__(self, instance=None, data=..., rider=None, **kwargs):
+        self.rider = rider
+        super().__init__(instance, data, **kwargs)
+
+    def get_passenger_status(self, ride):
+        interactor = GetPassengerInteractor()
+        passenger = interactor.get_passenger(self.rider, ride)
+        if not passenger:
+            return None
+        return passenger.status
 
     class Meta:
         model = Ride
         fields = '__all__'
 
 
-class PassengerSerializer(serializers.ModelSerializer):
+class PassengerPostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Passenger

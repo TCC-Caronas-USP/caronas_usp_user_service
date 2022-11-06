@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import RiderView, VehicleView, LocationView, RideView  # , PassengerView
+from .views import RiderView, VehicleView, LocationView, RideView, PassengerView
 
 urlpatterns = [
     path(
@@ -41,7 +41,7 @@ urlpatterns = [
         ),
     ),
     path(
-        'rides/',
+        'rides',
         RideView.as_view(
             actions={
                 'get': 'list',
@@ -49,26 +49,51 @@ urlpatterns = [
             }
         )
     ),
-    # path(
-    #     'rides/<int:pk>',
-    #     RideView.as_view( # A View de Rides precisa de uma correção para lidar com os PATCH
-    #         actions={
-    #             'patch': 'partial_update',
-    #             'delete': 'destroy'
-    #         }
-    #     )
-    # ),
-    # path(
-    #     'rides/driver',
-    #     RideView.as_view(
-    #         actions={
-    #             'get': '' # Retornar somente as Rides que possuem o id_driver do motorista
-    #         }
-    #     )
-    # ),
+    path(
+        'rides/<int:pk>',
+        RideView.as_view(
+            actions={
+                'patch': 'partial_update',
+                'delete': 'destroy'
+            }
+        )
+    ),
+    path(
+        'rides/driver',
+        RideView.as_view(
+            actions={
+                'get': 'retrieve_self'
+            }
+        )
+    ),
+    path(
+        'rides/passenger',
+        PassengerView.as_view(
+            actions={
+                'get': 'list'
+            }
+        )
+    ),
+    path(
+        'passengers',
+        PassengerView.as_view(
+            actions={
+                'post': 'create'
+            }
+        )
+    ),
+    path(
+        'passengers/<int:pk>',
+        PassengerView.as_view(
+            actions={
+                'patch': 'partial_update',
+                'delete': 'destroy'
+            }
+        )
+    ),
     # TODO: Remover request de location/
     path(
-        'location/',
+        'location',
         LocationView.as_view(
             actions={
                 'get': 'list',
