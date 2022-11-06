@@ -1,5 +1,5 @@
-from .repositories import VehicleRepository, RiderRepository
 from .interactors import CreateVehicleInteractor, CreateRiderInteractor
+from .repositories import VehicleRepository, RiderRepository
 
 
 class CreateVehicleInteractorFactory:
