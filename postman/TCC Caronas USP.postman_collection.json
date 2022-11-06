@@ -1,88 +1,11 @@
 {
 	"info": {
-		"_postman_id": "c2b08e47-4bee-4328-8fe0-bb366453daf9",
+		"_postman_id": "c36e2ef0-9914-49ab-b899-ff16a3aca71b",
 		"name": "TCC Caronas USP",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "16363388"
+		"_exporter_id": "19558944"
 	},
 	"item": [
-		{
-			"name": "Vehicle",
-			"item": [
-				{
-					"name": "Get Vehicle",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{server_url}}/vehicle/1",
-							"host": [
-								"{{server_url}}"
-							],
-							"path": [
-								"vehicle",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Post Vehicle",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"model\": \"Model T\",\r\n    \"color\": \"Preto\",\r\n    \"brand\": \"Ford\",\r\n    \"license_plate\": \"0000001\",\r\n    \"rider\": 1\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{server_url}}/vehicle/",
-							"host": [
-								"{{server_url}}"
-							],
-							"path": [
-								"vehicle",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Vehicle",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"color\": \"Branco\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{server_url}}/vehicle/1",
-							"host": [
-								"{{server_url}}"
-							],
-							"path": [
-								"vehicle",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
 		{
 			"name": "Rider",
 			"item": [
@@ -210,6 +133,83 @@
 			]
 		},
 		{
+			"name": "Vehicle",
+			"item": [
+				{
+					"name": "Get Vehicle",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/vehicle/1",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"vehicle",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Vehicle",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"model\": \"Model T\",\r\n    \"color\": \"Preto\",\r\n    \"brand\": \"Ford\",\r\n    \"license_plate\": \"0000001\",\r\n    \"rider\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/vehicle/",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"vehicle",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Vehicle",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"color\": \"Branco\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/vehicle/1",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"vehicle",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Auth",
 			"item": [
 				{
@@ -261,6 +261,436 @@
 								{
 									"key": "key",
 									"value": "{{API_KEY}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "------------------------",
+			"item": []
+		},
+		{
+			"name": "[TODO] Riders",
+			"item": [
+				{
+					"name": "[TODO] Riders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/riders",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"riders"
+							]
+						},
+						"description": "Retorna informações sobre o usuário logado para a **tela de perfil**."
+					},
+					"response": []
+				},
+				{
+					"name": "[TODO] Rider",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"key\": \"value\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/riders",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"riders"
+							]
+						},
+						"description": "Armazena no banco de dados informações sobre um novo usuário."
+					},
+					"response": []
+				},
+				{
+					"name": "[TODO] Rider",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"key\": \"value\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/riders",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"riders"
+							]
+						},
+						"description": "Faz modificações nos dados de um usuário gravados no banco a partir da **tela de modificar informações do perfil**."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Rides",
+			"item": [
+				{
+					"name": "Rides",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/rides",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"rides"
+							]
+						},
+						"description": "Retorna informações de caronas **ativas** para a **tela de caronas**."
+					},
+					"response": []
+				},
+				{
+					"name": "Driver rides",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/rides/driver",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"rides",
+								"driver"
+							]
+						},
+						"description": "Retorna informações de caronas oferecidas pelo usuário logado na plataforma para a **tela de caronas oferecidas**."
+					},
+					"response": []
+				},
+				{
+					"name": "Passenger rides",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/rides/passenger",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"rides",
+								"passenger"
+							]
+						},
+						"description": "Retorna informações sobre todas as caronas em que o usuário logado entrou para a **tela de caronas recebidas**."
+					},
+					"response": []
+				},
+				{
+					"name": "Ride",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"starting_point\": {\r\n        \"address\": \"rua AAAAAAAAAAA\",\r\n        \"lat\": -20.0,\r\n        \"lon\": -40.0\r\n    },\r\n    \"ending_point\": {\r\n        \"address\": \"rua BBBBBBBBBBBBBB\",\r\n        \"lat\": -25.0,\r\n        \"lon\": -45.0\r\n    },\r\n    \"start_time\": \"2025-11-03 22:30:00.000000\",\r\n    \"end_time\": \"2025-11-03 23:00:00.000000\",\r\n    \"price\": 10.00,\r\n    \"max_passengers\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/rides",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"rides"
+							]
+						},
+						"description": "Armazena no banco de dados informações sobre uma nova carona a partir da **tela de caronas oferecidas**."
+					},
+					"response": []
+				},
+				{
+					"name": "Ride",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"price\": 50.00\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/rides/1",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"rides",
+								"1"
+							]
+						},
+						"description": "Permite modificações em uma determinada carona gravada no banco de dados."
+					},
+					"response": []
+				},
+				{
+					"name": "Ride",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/rides/1",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"rides",
+								"1"
+							]
+						},
+						"description": "Permite a deleção de uma determinada carona gravada no banco de dados."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "[TODO] Passengers",
+			"item": [
+				{
+					"name": "Passenger",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ride\": 3,\r\n    \"meeting_point\": {\r\n        \"address\": \"Rua ABCDE\",\r\n        \"lat\": -10.00,\r\n        \"lon\": -20.00\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/passengers",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"passengers"
+							]
+						},
+						"description": "Faz relação entre um passageiro e uma carona, no momento em que este entra na carona, na **tela de caronas**."
+					},
+					"response": []
+				},
+				{
+					"name": "Passenger",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"meeting_point\": {\r\n        \"address\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\r\n        \"lat\": 10.0,\r\n        \"lon\": 12.0\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/passengers/5",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"passengers",
+								"5"
+							]
+						},
+						"description": "Permite alterações no _meeting_point_ de uma determinada carona."
+					},
+					"response": []
+				},
+				{
+					"name": "[TODO] Passenger",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/passengers/5",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"passengers",
+								"5"
+							]
+						},
+						"description": "Permite a deleção da relação entre um passageiro e uma carona."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "[TODO] Vehicle",
+			"item": [
+				{
+					"name": "[TODO] Vehicle",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"key\": \"value\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/vehicles",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"vehicles"
+							]
+						},
+						"description": "Permite gravar em banco um novo veículo para o usuário logado, na **tela de adicionar veículos no perfil**."
+					},
+					"response": []
+				},
+				{
+					"name": "[TODO] Vehicle",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"key\": \"value\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/vehicles/{{id_vehicle}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"vehicles",
+								"{{id_vehicle}}"
+							]
+						},
+						"description": "Permite modificar informações sobre um determinado veículo."
+					},
+					"response": []
+				},
+				{
+					"name": "[TODO] Vehicle",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/vehicles/{{id_vehicle}}",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"vehicles",
+								"{{id_vehicle}}"
+							]
+						},
+						"description": "Permite a deleção de dados de um determinado veículo do banco de dados."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "[REMOVE] Location",
+			"item": [
+				{
+					"name": "Location",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/location",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"location"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Location",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"address\": \"R. Jacques Lelarge - Jardim Santa Lucrecia\",\r\n    \"lat\": -23.442909078478575,\r\n    \"lon\": -46.7456783423298\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/location/",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"location",
+								""
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
 								}
 							]
 						}
