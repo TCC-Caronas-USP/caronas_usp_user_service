@@ -67,7 +67,7 @@ class VehicleView(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         rider = get_current_rider(request)
-        if rider.vehicles:
+        if rider.vehicles.count():
             return Response(status=status.HTTP_400_BAD_REQUEST)
         request.data['driver'] = rider.id
         return super().create(request, *args, **kwargs)
