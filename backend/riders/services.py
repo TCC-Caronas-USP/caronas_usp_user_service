@@ -68,3 +68,10 @@ class OneSignalService():
         ride_date_string = f"{ride.start_time.day}/{ride.start_time.month}"
         content = f"Infelizmente, {driver_first_name} teve que cancelar a carona do dia {ride_date_string}!"
         self.send_notification(external_user_ids=external_user_ids, content=content)
+
+    def send_ride_start_notification(self, driver: Rider, riders: List[Rider], ride: Ride):
+        external_user_ids = [rider.email for rider in riders]
+        external_user_ids.append(driver.email)
+        ride_destination = ride.ending_point.address
+        content = f"Atenção, a carona para {ride_destination} irá sair em 10 minutos!"
+        self.send_notification(external_user_ids=external_user_ids, content=content)
