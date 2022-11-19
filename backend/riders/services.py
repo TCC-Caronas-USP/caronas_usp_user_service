@@ -1,3 +1,4 @@
+from datetime import timedelta
 from typing import List
 from .onesignal_setup import ONESIGNAL_APP_ID, ONESIGNAL_CONFIG
 from .models import Rider, Ride
@@ -30,7 +31,8 @@ class RideService():
 
 class OneSignalService():
 
-    def send_notification(self, external_user_ids=None, content=None, headings=None, subtitle=None, buttons=None):
+    def send_notification(self, external_user_ids=None, content=None,
+                          headings=None, subtitle=None, buttons=None, send_after=None):
         contents = {
             'en': content,
             'pt': content
@@ -46,6 +48,7 @@ class OneSignalService():
                 headings=headings,
                 subtitle=subtitle,
                 buttons=buttons,
+                send_after=send_after,
                 )
             api_instance.create_notification(notification)
 
@@ -78,4 +81,8 @@ class OneSignalService():
         external_user_ids.append(driver.email)
         ride_destination = ride.ending_point.address
         content = f"Atenção, a carona para {ride_destination} irá sair em 10 minutos!"
-        self.send_notification(external_user_ids=external_user_ids, content=content)
+
+        ride_datetime_minus_10 = ride.start_time - timedelta(minutes=10)
+        send_after = ride_datetime_minus_10.isoformat()
+
+        self.send_notification(external_user_ids=external_user_ids, content=content, send_after=send_after)
