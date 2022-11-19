@@ -1,6 +1,4 @@
 from datetime import timedelta
-from django.utils.dateparse import parse_datetime
-from django.utils.timezone import get_default_timezone
 from typing import List
 from .onesignal_setup import ONESIGNAL_APP_ID, ONESIGNAL_CONFIG
 from .models import Rider, Ride, Passenger
@@ -42,6 +40,8 @@ class PassengerService():
 
 class OneSignalService():
 
+    ride_service = RideService()
+
     def send_notification(self, external_user_ids=None, content=None,
                           headings=None, subtitle=None, buttons=None, send_after=None):
         contents = {
@@ -60,9 +60,15 @@ class OneSignalService():
                 subtitle=subtitle,
                 buttons=buttons,
                 send_after=send_after,
-                )
+            )
 
-            api_instance.create_notification(notification)
+            api_response = api_instance.create_notification(notification)
+            return api_response.id
+
+    def cancel_notification(self, notification_id):
+        with onesignal.ApiClient(ONESIGNAL_CONFIG) as api_client:
+            api_instance = default_api.DefaultApi(api_client)
+            api_instance.cancel_notification(ONESIGNAL_APP_ID, notification_id)
 
     def send_new_passenger_notification(self, driver: Rider, rider: Rider, ride: Ride):
         external_user_id = driver.email
@@ -91,16 +97,23 @@ class OneSignalService():
         self.send_notification(
             external_user_ids=external_user_ids, content=content)
 
-    def send_ride_start_notification(self, driver: Rider,
-                                     riders: List[Rider],
-                                     ending_point_address: str,
-                                     start_time=str):
+    def schedule_ride_start_notification(self, ride: Ride,
+                                         previous_notification_id=None):
+
+        riders = self.ride_service.get_riders(ride)
+        driver = ride.driver
+        ending_point_address = ride.ending_point.address
+        start_time = ride.start_time
+
         external_user_ids = [rider.email for rider in riders]
         external_user_ids.append(driver.email)
         content = f"Atenção, a carona para {ending_point_address} irá sair em 10 minutos!"
 
-        naive_ride_datetime = parse_datetime(start_time)
-        ride_datetime = naive_ride_datetime.replace(tzinfo=get_default_timezone())
-        ride_datetime_minus_10 = ride_datetime - timedelta(minutes=10)
+        ride_datetime_minus_10 = start_time - timedelta(minutes=10)
 
-        self.send_notification(external_user_ids=external_user_ids, content=content, send_after=ride_datetime_minus_10)
+        if previous_notification_id:
+            self.cancel_notification(previous_notification_id)
+
+        notification_id = self.send_notification(
+            external_user_ids=external_user_ids, content=content, send_after=ride_datetime_minus_10)
+        return notification_id

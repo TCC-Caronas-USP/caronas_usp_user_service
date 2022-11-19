@@ -46,7 +46,8 @@ class RideAdmin(admin.ModelAdmin):
         'start_time',
         'end_time',
         'price',
-        'max_passengers'
+        'max_passengers',
+        'notification_id'
     )
 
 
