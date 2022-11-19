@@ -97,7 +97,6 @@ class OneSignalService():
                                      start_time=str):
         external_user_ids = [rider.email for rider in riders]
         external_user_ids.append(driver.email)
-        external_user_ids.append('gabriel.desidera@usp.br')
         content = f"Atenção, a carona para {ending_point_address} irá sair em 10 minutos!"
 
         naive_ride_datetime = parse_datetime(start_time)
