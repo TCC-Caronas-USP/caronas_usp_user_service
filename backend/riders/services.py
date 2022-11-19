@@ -1,9 +1,15 @@
+from datetime import timedelta
+from django.utils.dateparse import parse_datetime
+from django.utils.timezone import get_default_timezone
 from typing import List
 from .onesignal_setup import ONESIGNAL_APP_ID, ONESIGNAL_CONFIG
 from .models import Rider, Ride, Passenger
 import onesignal
 from onesignal.api import default_api
 from onesignal.model.notification import Notification
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class RiderService():
@@ -36,7 +42,8 @@ class PassengerService():
 
 class OneSignalService():
 
-    def send_notification(self, external_user_ids=None, content=None, headings=None, subtitle=None, buttons=None):
+    def send_notification(self, external_user_ids=None, content=None,
+                          headings=None, subtitle=None, buttons=None, send_after=None):
         contents = {
             'en': content,
             'pt': content
@@ -52,7 +59,9 @@ class OneSignalService():
                 headings=headings,
                 subtitle=subtitle,
                 buttons=buttons,
-            )
+                send_after=send_after,
+                )
+
             api_instance.create_notification(notification)
 
     def send_new_passenger_notification(self, driver: Rider, rider: Rider, ride: Ride):
@@ -82,10 +91,16 @@ class OneSignalService():
         self.send_notification(
             external_user_ids=external_user_ids, content=content)
 
-    def send_ride_start_notification(self, driver: Rider, riders: List[Rider], ride: Ride):
+    def send_ride_start_notification(self, driver: Rider,
+                                     riders: List[Rider],
+                                     ending_point_address: str,
+                                     start_time=str):
         external_user_ids = [rider.email for rider in riders]
         external_user_ids.append(driver.email)
-        ride_destination = ride.ending_point.address
-        content = f"Atenção, a carona para {ride_destination} irá sair em 10 minutos!"
-        self.send_notification(
-            external_user_ids=external_user_ids, content=content)
+        content = f"Atenção, a carona para {ending_point_address} irá sair em 10 minutos!"
+
+        naive_ride_datetime = parse_datetime(start_time)
+        ride_datetime = naive_ride_datetime.replace(tzinfo=get_default_timezone())
+        ride_datetime_minus_10 = ride_datetime - timedelta(minutes=10)
+
+        self.send_notification(external_user_ids=external_user_ids, content=content, send_after=ride_datetime_minus_10)
