@@ -1,44 +1,27 @@
 from django.urls import path
 
-from .views import RiderView, VehicleView, LocationView, RideView, PassengerView
+from .views import RiderView, VehicleView, RideView, PassengerView
 
 urlpatterns = [
     path(
-        'vehicle/',
+        'riders',
+        RiderView.as_view(
+            actions={
+                'get': 'retrieve_self',
+                'post': 'create',
+                'patch': 'custom_update'
+            }
+        )
+    ),
+    path(
+        'vehicles',
         VehicleView.as_view(
             actions={
                 'post': 'create',
+                'patch': 'custom_update',
+                'delete': 'custom_destroy'
             }
-        ),
-    ),
-    path(
-        'vehicle/<int:pk>',
-        VehicleView.as_view(
-            actions={
-                'get': 'retrieve',
-                'patch': 'partial_update',
-                'delete': 'destroy'
-            }
-        ),
-    ),
-    path(
-        'rider/',
-        RiderView.as_view(
-            actions={
-                'post': 'create',
-                'get': 'retrieve_self'
-            }
-        ),
-    ),
-    path(
-        'rider/<int:pk>',
-        RiderView.as_view(
-            actions={
-                'get': 'retrieve',
-                'patch': 'partial_update',
-                'delete': 'destroy'
-            }
-        ),
+        )
     ),
     path(
         'rides',
@@ -86,18 +69,23 @@ urlpatterns = [
         'passengers/<int:pk>',
         PassengerView.as_view(
             actions={
-                'patch': 'partial_update',
                 'delete': 'destroy'
             }
         )
     ),
-    # TODO: Remover request de location/
     path(
-        'location',
-        LocationView.as_view(
+        'passengers/<int:pk>/accept',
+        PassengerView.as_view(
             actions={
-                'get': 'list',
-                'post': 'create',
+                'patch': 'accept'
+            }
+        )
+    ),
+    path(
+        'passengers/<int:pk>/reject',
+        PassengerView.as_view(
+            actions={
+                'patch': 'reject'
             }
         )
     )
