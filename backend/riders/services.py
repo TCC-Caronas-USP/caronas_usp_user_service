@@ -1,6 +1,4 @@
 from datetime import timedelta
-from django.utils.dateparse import parse_datetime
-from django.utils.timezone import get_default_timezone
 from typing import List
 from .onesignal_setup import ONESIGNAL_APP_ID, ONESIGNAL_CONFIG
 from .models import Rider, Ride, Passenger
@@ -64,9 +62,8 @@ class OneSignalService():
                 send_after=send_after,
             )
 
-            api_instance.create_notification(notification)
-
-            return notification
+            api_response = api_instance.create_notification(notification)
+            return api_response.id
 
     def cancel_notification(self, notification_id):
         with onesignal.ApiClient(ONESIGNAL_CONFIG) as api_client:
@@ -112,14 +109,11 @@ class OneSignalService():
         external_user_ids.append(driver.email)
         content = f"Atenção, a carona para {ending_point_address} irá sair em 10 minutos!"
 
-        naive_ride_datetime = parse_datetime(start_time)
-        ride_datetime = naive_ride_datetime.replace(
-            tzinfo=get_default_timezone())
-        ride_datetime_minus_10 = ride_datetime - timedelta(minutes=10)
+        ride_datetime_minus_10 = start_time - timedelta(minutes=10)
 
         if previous_notification_id:
             self.cancel_notification(previous_notification_id)
 
-        notification = self.send_notification(
+        notification_id = self.send_notification(
             external_user_ids=external_user_ids, content=content, send_after=ride_datetime_minus_10)
-        return notification.id
+        return notification_id

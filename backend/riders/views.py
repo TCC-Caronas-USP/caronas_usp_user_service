@@ -120,7 +120,7 @@ class RideView(ModelViewSet):
             location.save()
             request.data[point] = location.id
 
-        request.data['notification_id'] = ''
+        request.data['notification_id'] = 'temp'
 
         rider = get_current_rider(request)
         request.data['driver'] = rider.id
