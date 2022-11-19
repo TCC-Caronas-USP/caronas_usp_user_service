@@ -1,3 +1,4 @@
+from typing import List
 from .onesignal_setup import ONESIGNAL_APP_ID, ONESIGNAL_CONFIG
 from .models import Rider, Ride
 import onesignal
@@ -21,6 +22,10 @@ class RideService():
 
     def get_ride(self, ride_id):
         return Ride.objects.get(id=ride_id)
+
+    def get_riders(self, ride: Ride):
+        passengers = ride.passenger_set.all()
+        return [passenger.rider for passenger in passengers]
 
 
 class OneSignalService():
@@ -50,3 +55,27 @@ class OneSignalService():
         ride_date_string = f"{ride.start_time.day}/{ride.start_time.month}"
         content = f"{rider_first_name} quer entrar na sua carona do dia {ride_date_string}!"
         self.send_notification(external_user_ids=[external_user_id], content=content)
+
+    def send_passenger_reviewed_notification(self, driver: Rider, rider: Rider, ride: Ride, accepted: bool):
+        external_user_id = rider.email
+        driver_first_name = driver.name.split()[0]
+        ride_date_string = f"{ride.start_time.day}/{ride.start_time.month}"
+        if accepted:
+            content = f"Eba! {driver_first_name} te aceitou na carona do dia {ride_date_string}!"
+        else:
+            content = f"Infelizmente, {driver_first_name} não te aceitou na carona do dia {ride_date_string}!"
+        self.send_notification(external_user_ids=[external_user_id], content=content)
+
+    def send_ride_cancelled_notification(self, driver: Rider, riders: List[Rider], ride: Ride):
+        external_user_ids = [rider.email for rider in riders]
+        driver_first_name = driver.name.split()[0]
+        ride_date_string = f"{ride.start_time.day}/{ride.start_time.month}"
+        content = f"Infelizmente, {driver_first_name} teve que cancelar a carona do dia {ride_date_string}!"
+        self.send_notification(external_user_ids=external_user_ids, content=content)
+
+    def send_ride_start_notification(self, driver: Rider, riders: List[Rider], ride: Ride):
+        external_user_ids = [rider.email for rider in riders]
+        external_user_ids.append(driver.email)
+        ride_destination = ride.ending_point.address
+        content = f"Atenção, a carona para {ride_destination} irá sair em 10 minutos!"
+        self.send_notification(external_user_ids=external_user_ids, content=content)

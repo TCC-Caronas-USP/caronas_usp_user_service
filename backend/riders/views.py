@@ -56,6 +56,8 @@ class LocationView(ModelViewSet):
 class RideView(ModelViewSet):
     serializer_class = RidePostSerializer
     queryset = Ride.objects
+    onesignal_service = OneSignalService()
+    ride_service = RideService()
 
     # TODO: é necessário retornar informações dos passageiros de cada carona
     def list(self, request, *args, **kwargs):
@@ -84,6 +86,13 @@ class RideView(ModelViewSet):
         # my_current_rides = my_rides.filter(start_time__gte=datetime.now())
         serializer = self.get_serializer(my_rides, many=True)
         return Response(serializer.data)
+
+    def destroy(self, request, pk=None, *args, **kwargs):
+        ride = self.ride_service.get_ride(pk)
+        driver = ride.driver
+        riders = self.ride_service.get_riders(ride)
+        self.onesignal_service.send_ride_cancelled_notification(ride=ride, driver=driver, riders=riders)
+        return super().destroy(request, pk=pk, *args, **kwargs)
 
 
 class PassengerView(ModelViewSet):
