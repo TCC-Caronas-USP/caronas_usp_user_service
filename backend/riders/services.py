@@ -50,3 +50,13 @@ class OneSignalService():
         ride_date_string = f"{ride.start_time.day}/{ride.start_time.month}"
         content = f"{rider_first_name} quer entrar na sua carona do dia {ride_date_string}!"
         self.send_notification(external_user_ids=[external_user_id], content=content)
+
+    def send_passenger_reviewed_notification(self, driver: Rider, rider: Rider, ride: Ride, accepted: bool):
+        external_user_id = rider.email
+        driver_first_name = driver.name.split()[0]
+        ride_date_string = f"{ride.start_time.day}/{ride.start_time.month}"
+        if accepted:
+            content = f"Eba! {driver_first_name} te aceitou na carona do dia {ride_date_string}!"
+        else:
+            content = f"Infelizmente, {driver_first_name} não te aceitou na carona do dia {ride_date_string}!"
+        self.send_notification(external_user_ids=[external_user_id], content=content)
