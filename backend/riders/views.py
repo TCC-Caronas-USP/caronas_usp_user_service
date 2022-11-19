@@ -4,12 +4,11 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from .services import OneSignalService, RideService
+from .services import OneSignalService, RideService, PassengerService
 from .exceptions import NoRiderFound
 from .models import Rider, Vehicle, Location, Ride, Passenger
 from .serializers import RiderSerializer, RiderUpdateSerializer
 from .serializers import VehicleSerializer
-from .serializers import LocationSerializer
 from .serializers import RidesSerializer, RidePostSerializer
 from .serializers import PassengerPostSerializer
 
@@ -99,11 +98,6 @@ class VehicleView(ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class LocationView(ModelViewSet):
-    serializer_class = LocationSerializer
-    queryset = Location.objects
-
-
 class RideView(ModelViewSet):
     serializer_class = RidePostSerializer
     queryset = Ride.objects
@@ -152,6 +146,7 @@ class PassengerView(ModelViewSet):
     queryset = Passenger.objects
     onesignal_service = OneSignalService()
     ride_service = RideService()
+    passenger_service = PassengerService()
 
     def list(self, request, *args, **kwargs):
         rider = get_current_rider(request)
@@ -178,12 +173,14 @@ class PassengerView(ModelViewSet):
 
         return super().create(request, *args, **kwargs)
 
-    def partial_update(self, request, *args, **kwargs):
-        dict = request.data['meeting_point']
-        location = Location(**dict)
-        location.save()
-        request.data['meeting_point'] = location.id
+    def accept(self, request, pk=None, *args, **kwargs):
+        passenger = self.passenger_service.get_passenger(pk)
+        passenger.status = 2
+        passenger.save()
+        return Response(status=status.HTTP_200_OK)
 
-        rider = get_current_rider(request)
-        request.data['passenger'] = rider.id
-        return super().partial_update(request, *args, **kwargs)
+    def reject(self, request, pk=None, *args, **kwargs):
+        passenger = self.passenger_service.get_passenger(pk)
+        passenger.status = 0
+        passenger.save()
+        return Response(status=status.HTTP_200_OK)

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import RiderView, VehicleView, LocationView, RideView, PassengerView
+from .views import RiderView, VehicleView, RideView, PassengerView
 
 urlpatterns = [
     path(
@@ -69,18 +69,23 @@ urlpatterns = [
         'passengers/<int:pk>',
         PassengerView.as_view(
             actions={
-                'patch': 'partial_update',
                 'delete': 'destroy'
             }
         )
     ),
-    # TODO: Remover request de location/
     path(
-        'location',
-        LocationView.as_view(
+        'passengers/<int:pk>/accept',
+        PassengerView.as_view(
             actions={
-                'get': 'list',
-                'post': 'create',
+                'patch': 'accept'
+            }
+        )
+    ),
+    path(
+        'passengers/<int:pk>/reject',
+        PassengerView.as_view(
+            actions={
+                'patch': 'reject'
             }
         )
     )
