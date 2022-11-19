@@ -3,6 +3,7 @@ from datetime import datetime
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from .services import OneSignalService, RideService
 from .exceptions import NoRiderFound
 from .models import Rider, Vehicle, Location, Ride, Passenger
 from .serializers import RiderSerializer, RiderUpdateSerializer
@@ -35,7 +36,7 @@ class RiderView(ModelViewSet):
         rider = get_current_rider(request)
         serializer = self.get_serializer(rider)
         return Response(serializer.data)
-        
+
     def create(self, request, *args, **kwargs):
         if 'uid' not in request.data:
             request.data['uid'] = request.auth
@@ -88,6 +89,8 @@ class RideView(ModelViewSet):
 class PassengerView(ModelViewSet):
     serializer_class = PassengerPostSerializer
     queryset = Passenger.objects
+    onesignal_service = OneSignalService()
+    ride_service = RideService()
 
     def list(self, request, *args, **kwargs):
         rider = get_current_rider(request)
@@ -105,6 +108,12 @@ class PassengerView(ModelViewSet):
 
         rider = get_current_rider(request)
         request.data['rider'] = rider.id
+
+        ride = self.ride_service.get_ride(request.data['ride'])
+        driver = ride.driver
+
+        self.onesignal_service.send_new_passenger_notification(driver=driver, rider=rider, ride=ride)
+
         return super().create(request, *args, **kwargs)
 
     def partial_update(self, request, *args, **kwargs):
