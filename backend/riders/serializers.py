@@ -41,7 +41,9 @@ class RidePostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ride
         fields = '__all__'
-
+        extra_kwargs = {
+            'notification_id': {'write_only': True}
+        }
 
 # class PassengerGetSerializer(serializers.ModelSerializer):
 #     passenger = RiderSerializer(read_only=True)

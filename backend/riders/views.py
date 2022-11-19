@@ -113,9 +113,6 @@ class RideView(ModelViewSet):
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
-
-        ending_point_address = request.data['ending_point']['address']
-
         points = ['starting_point', 'ending_point']
         for point in points:
             dict = request.data[point]
@@ -123,17 +120,23 @@ class RideView(ModelViewSet):
             location.save()
             request.data[point] = location.id
 
+        request.data['notification_id'] = ''
+
         rider = get_current_rider(request)
         request.data['driver'] = rider.id
 
-        start_time = request.data['start_time']
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        ride = serializer.save()
 
-        self.onesignal_service.send_ride_start_notification(driver=rider,
-                                                            riders=[],
-                                                            ending_point_address=ending_point_address,
-                                                            start_time=start_time)
+        notification_id = self.onesignal_service.schedule_ride_start_notification(
+            ride=ride)
 
-        return super().create(request, *args, **kwargs)
+        ride.notification_id = notification_id
+        ride.save()
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def retrieve_self(self, request, *args, **kwargs):
         rider = get_current_rider(request)
@@ -149,6 +152,7 @@ class RideView(ModelViewSet):
         riders = self.ride_service.get_riders(ride)
         self.onesignal_service.send_ride_cancelled_notification(
             ride=ride, driver=driver, riders=riders)
+        self.onesignal_service.cancel_notification(ride.notification_id)
         return super().destroy(request, pk=pk, *args, **kwargs)
 
 
@@ -188,10 +192,34 @@ class PassengerView(ModelViewSet):
         passenger = self.passenger_service.get_passenger(pk)
         passenger.status = 2
         passenger.save()
+
+        ride = passenger.ride
+        previous_notification_id = ride.notification_id
+
+        notification_id = self.onesignal_service.schedule_ride_start_notification(
+            ride=ride, previous_notification_id=previous_notification_id)
+
+        ride.notification_id = notification_id
+        ride.save()
+
+        rider = passenger.rider
+        driver = ride.driver
+
+        self.onesignal_service.send_passenger_reviewed_notification(
+            accepted=True, rider=rider, ride=ride, driver=driver)
+
         return Response(status=status.HTTP_200_OK)
 
     def reject(self, request, pk=None, *args, **kwargs):
         passenger = self.passenger_service.get_passenger(pk)
         passenger.status = 0
         passenger.save()
+
+        ride = passenger.ride
+        rider = passenger.rider
+        driver = ride.driver
+
+        self.onesignal_service.send_passenger_reviewed_notification(
+            accepted=False, rider=rider, ride=ride, driver=driver)
+
         return Response(status=status.HTTP_200_OK)
