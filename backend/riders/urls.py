@@ -4,41 +4,24 @@ from .views import RiderView, VehicleView, LocationView, RideView, PassengerView
 
 urlpatterns = [
     path(
-        'vehicle/',
+        'riders',
+        RiderView.as_view(
+            actions={
+                'get': 'retrieve_self',
+                'post': 'create',
+                'patch': 'custom_update'
+            }
+        )
+    ),
+    path(
+        'vehicles',
         VehicleView.as_view(
             actions={
                 'post': 'create',
+                'patch': 'custom_update',
+                'delete': 'custom_destroy'
             }
-        ),
-    ),
-    path(
-        'vehicle/<int:pk>',
-        VehicleView.as_view(
-            actions={
-                'get': 'retrieve',
-                'patch': 'partial_update',
-                'delete': 'destroy'
-            }
-        ),
-    ),
-    path(
-        'rider/',
-        RiderView.as_view(
-            actions={
-                'post': 'create',
-                'get': 'retrieve_self'
-            }
-        ),
-    ),
-    path(
-        'rider/<int:pk>',
-        RiderView.as_view(
-            actions={
-                'get': 'retrieve',
-                'patch': 'partial_update',
-                'delete': 'destroy'
-            }
-        ),
+        )
     ),
     path(
         'rides',

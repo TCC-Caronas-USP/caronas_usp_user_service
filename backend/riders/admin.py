@@ -5,23 +5,26 @@ from .models import Rider, Vehicle, Location, Ride, Passenger
 
 class RiderAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
+        'name',
         'email',
-        'telefone',
-        'instituto',
-        'rides_as_driver',
-        'rides_as_passenger',
-        'ranking'
+        'phone_number',
+        'course',
+        'college',
+        'ingress_year',
+        'profile_image',
+        'uid'
     )
 
 
 class VehicleAdmin(admin.ModelAdmin):
     list_display = (
         'id',
+        'driver',
+        'license_plate',
         'brand',
         'model',
-        'color',
-        'rider',
-        'license_plate'
+        'color'
     )
 
 
