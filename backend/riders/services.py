@@ -1,3 +1,4 @@
+from typing import List
 from .onesignal_setup import ONESIGNAL_APP_ID, ONESIGNAL_CONFIG
 from .models import Rider, Ride
 import onesignal
@@ -60,3 +61,10 @@ class OneSignalService():
         else:
             content = f"Infelizmente, {driver_first_name} não te aceitou na carona do dia {ride_date_string}!"
         self.send_notification(external_user_ids=[external_user_id], content=content)
+
+    def send_ride_cancelled_notification(self, driver: Rider, riders: List[Rider], ride: Ride):
+        external_user_ids = [rider.email for rider in riders]
+        driver_first_name = driver.name.split()[0]
+        ride_date_string = f"{ride.start_time.day}/{ride.start_time.month}"
+        content = f"Infelizmente, {driver_first_name} teve que cancelar a carona do dia {ride_date_string}!"
+        self.send_notification(external_user_ids=external_user_ids, content=content)
