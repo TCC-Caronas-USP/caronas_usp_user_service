@@ -219,7 +219,7 @@
 			]
 		},
 		{
-			"name": "[TODO] Passengers",
+			"name": "Passengers",
 			"item": [
 				{
 					"name": "Passenger",
@@ -249,13 +249,13 @@
 					"response": []
 				},
 				{
-					"name": "Passenger",
+					"name": "Accept passenger",
 					"request": {
 						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"meeting_point\": {\r\n        \"address\": \"bbbbbbbbbb\",\r\n        \"lat\": 10.0,\r\n        \"lon\": 12.0\r\n    }\r\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -263,13 +263,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{server_url}}/passengers/3",
+							"raw": "{{server_url}}/passengers/4/accept",
 							"host": [
 								"{{server_url}}"
 							],
 							"path": [
 								"passengers",
-								"3"
+								"4",
+								"accept"
 							]
 						},
 						"description": "Permite alterações no _meeting_point_ de uma determinada carona."
@@ -277,7 +278,36 @@
 					"response": []
 				},
 				{
-					"name": "[TODO] Passenger",
+					"name": "Reject passenger",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/passengers/4/accept",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"passengers",
+								"4",
+								"accept"
+							]
+						},
+						"description": "Permite alterações no _meeting_point_ de uma determinada carona."
+					},
+					"response": []
+				},
+				{
+					"name": "Passenger",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -369,62 +399,6 @@
 							]
 						},
 						"description": "Permite a deleção de dados de um determinado veículo do banco de dados."
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "[REMOVE] Location",
-			"item": [
-				{
-					"name": "Location",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{server_url}}/location",
-							"host": [
-								"{{server_url}}"
-							],
-							"path": [
-								"location"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Location",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"address\": \"R. Jacques Lelarge - Jardim Santa Lucrecia\",\r\n    \"lat\": -23.442909078478575,\r\n    \"lon\": -46.7456783423298\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{server_url}}/location/",
-							"host": [
-								"{{server_url}}"
-							],
-							"path": [
-								"location",
-								""
-							],
-							"query": [
-								{
-									"key": "",
-									"value": null,
-									"disabled": true
-								}
-							]
-						}
 					},
 					"response": []
 				}
