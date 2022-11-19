@@ -23,6 +23,10 @@ class RideService():
     def get_ride(self, ride_id):
         return Ride.objects.get(id=ride_id)
 
+    def get_riders(self, ride: Ride):
+        passengers = ride.passenger_set.all()
+        return [passenger.rider for passenger in passengers]
+
 
 class OneSignalService():
 
