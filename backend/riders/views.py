@@ -68,6 +68,9 @@ class RideView(ModelViewSet):
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
+
+        ending_point_address = request.data['ending_point']['address']
+
         points = ['starting_point', 'ending_point']
         for point in points:
             dict = request.data[point]
@@ -77,6 +80,14 @@ class RideView(ModelViewSet):
 
         rider = get_current_rider(request)
         request.data['driver'] = rider.id
+
+        start_time = request.data['start_time']
+
+        self.onesignal_service.send_ride_start_notification(driver=rider,
+                                                            riders=[],
+                                                            ending_point_address=ending_point_address,
+                                                            start_time=start_time)
+
         return super().create(request, *args, **kwargs)
 
     def retrieve_self(self, request, *args, **kwargs):
