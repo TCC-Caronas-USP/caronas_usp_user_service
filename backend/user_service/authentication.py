@@ -1,9 +1,13 @@
 from firebase_admin import auth, credentials, initialize_app
 from rest_framework import authentication
-
+import json
+import os
 from .exceptions import FirebaseError, InvalidAuthToken, NoAuthToken
 
-cred = credentials.Certificate('firebase-credentials.json')
+firebase_config_str = os.environ.get('FIREBASE_CONFIG')
+credentials_dict = json.loads(firebase_config_str, strict=False)
+
+cred = credentials.Certificate(credentials_dict)
 
 default_app = initialize_app(cred)
 
