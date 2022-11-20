@@ -7,7 +7,7 @@ from rest_framework.viewsets import ModelViewSet
 from .services import OneSignalService, RideService, PassengerService
 from .exceptions import NoRiderFound
 from .models import Rider, Vehicle, Location, Ride, Passenger
-from .serializers import RiderSerializer, RiderUpdateSerializer
+from .serializers import RidePassengersSerializer, RiderSerializer, RiderUpdateSerializer
 from .serializers import VehicleSerializer
 from .serializers import RidesSerializer, RidePostSerializer
 from .serializers import PassengerPostSerializer
@@ -104,12 +104,10 @@ class RideView(ModelViewSet):
     onesignal_service = OneSignalService()
     ride_service = RideService()
 
-    # TODO: é necessário retornar informações dos passageiros de cada carona
     def list(self, request, *args, **kwargs):
         all_rides = Ride.objects.all()
         current_rides = all_rides.filter(start_time__gte=datetime.now())
-        serializer = RidesSerializer(
-            current_rides, many=True, rider=get_current_rider(request))
+        serializer = RidesSerializer(current_rides, many=True)
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
@@ -141,14 +139,27 @@ class RideView(ModelViewSet):
     def retrieve_self(self, request, *args, **kwargs):
         rider = get_current_rider(request)
         my_rides = Ride.objects.filter(driver=rider)
-        # TODO: Avaliar se faz sentido
-        # my_current_rides = my_rides.filter(start_time__gte=datetime.now())
-        serializer = self.get_serializer(my_rides, many=True)
+        serializer = RidesSerializer(my_rides, many=True)
         return Response(serializer.data)
 
+    def custom_retrieve(self, request, pk=None, *args, **kwargs):
+        ride = self.ride_service.get_ride(pk)
+        serializer = RidePassengersSerializer(ride)
+        return Response(serializer.data)
+
+    def partial_update(self, request, pk=None, *args, **kwargs):
+        request_rider = get_current_rider(request)
+        ride = self.ride_service.get_ride(pk)
+        if ride.driver.id != request_rider.id:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        return super().partial_update(request, *args, **kwargs)
+
     def destroy(self, request, pk=None, *args, **kwargs):
+        request_rider = get_current_rider(request)
         ride = self.ride_service.get_ride(pk)
         driver = ride.driver
+        if driver.id != request_rider.id:
+            return Response(status=status.HTTP_403_FORBIDDEN)
         riders = self.ride_service.get_riders(ride)
         self.onesignal_service.send_ride_cancelled_notification(
             ride=ride, driver=driver, riders=riders)
@@ -167,8 +178,7 @@ class PassengerView(ModelViewSet):
         rider = get_current_rider(request)
         passengers = rider.passenger_set.all()
         rides = [passenger.ride for passenger in passengers]
-        serializer = RidesSerializer(
-            rides, many=True, rider=get_current_rider(request))
+        serializer = RidePassengersSerializer(rides, many=True)
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
@@ -188,8 +198,22 @@ class PassengerView(ModelViewSet):
 
         return super().create(request, *args, **kwargs)
 
+    def destroy(self, request, pk=None, *args, **kwargs):
+        request_rider = get_current_rider(request)
+        passenger_to_destroy = self.passenger_service.get_passenger(pk)
+        if passenger_to_destroy.rider.id != request_rider.id:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        return super().destroy(request, *args, **kwargs)
+
     def accept(self, request, pk=None, *args, **kwargs):
+
+        request_driver = get_current_rider(request)
         passenger = self.passenger_service.get_passenger(pk)
+        ride = passenger.ride
+
+        if ride.driver.id != request_driver.id:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
         passenger.status = 2
         passenger.save()
 
@@ -211,7 +235,14 @@ class PassengerView(ModelViewSet):
         return Response(status=status.HTTP_200_OK)
 
     def reject(self, request, pk=None, *args, **kwargs):
+
+        request_driver = get_current_rider(request)
         passenger = self.passenger_service.get_passenger(pk)
+        ride = passenger.ride
+
+        if ride.driver.id != request_driver.id:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
         passenger.status = 0
         passenger.save()
 
