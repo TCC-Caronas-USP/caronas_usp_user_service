@@ -6,6 +6,7 @@ import onesignal
 from onesignal.api import default_api
 from onesignal.model.notification import Notification
 import logging
+from contextlib import suppress
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +31,18 @@ class RideService():
     def get_riders(self, ride: Ride):
         passengers = ride.passenger_set.all()
         return [passenger.rider for passenger in passengers]
+
+    def get_status(self, ride, rider):
+        passenger = ride.passenger_set.get(rider=rider.id)
+        return passenger.status
+
+    def get_meeting_point(self, ride, rider):
+        passenger = ride.passenger_set.get(rider=rider.id)
+        return passenger.meeting_point
+
+    def get_passenger(self, ride, rider):
+        passenger = ride.passenger_set.get(rider=rider.id)
+        return passenger
 
 
 class PassengerService():
@@ -66,9 +79,10 @@ class OneSignalService():
             return api_response.id
 
     def cancel_notification(self, notification_id):
-        with onesignal.ApiClient(ONESIGNAL_CONFIG) as api_client:
+        with suppress(Exception), onesignal.ApiClient(ONESIGNAL_CONFIG) as api_client:
             api_instance = default_api.DefaultApi(api_client)
-            api_instance.cancel_notification(ONESIGNAL_APP_ID, notification_id)
+            api_instance.cancel_notification(
+                ONESIGNAL_APP_ID, notification_id)
 
     def send_new_passenger_notification(self, driver: Rider, rider: Rider, ride: Ride):
         external_user_id = driver.email

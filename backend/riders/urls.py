@@ -36,6 +36,7 @@ urlpatterns = [
         'rides/<int:pk>',
         RideView.as_view(
             actions={
+                'get': 'custom_retrieve',
                 'patch': 'partial_update',
                 'delete': 'destroy'
             }

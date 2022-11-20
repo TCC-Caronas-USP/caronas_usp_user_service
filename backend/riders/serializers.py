@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from .interactors import GetPassengerInteractor
+from .services import RideService
+
 from .models import Rider, Vehicle, Location, Ride, Passenger
 
 
@@ -45,39 +46,63 @@ class RidePostSerializer(serializers.ModelSerializer):
             'notification_id': {'write_only': True}
         }
 
-# class PassengerGetSerializer(serializers.ModelSerializer):
-#     passenger = RiderSerializer(read_only=True)
-
-#     class Meta:
-#         model = Passenger
-#         fields = ['passenger', 'meeting_point']
-
 
 class RidesSerializer(serializers.ModelSerializer):
     driver = RiderSerializer(read_only=True)
     starting_point = LocationSerializer(read_only=True)
     ending_point = LocationSerializer(read_only=True)
-    status = serializers.SerializerMethodField('get_passenger_status')
     passenger_count = serializers.IntegerField(source='get_passenger_count')
-
-    def __init__(self, instance=None, data=..., rider=None, **kwargs):
-        self.rider = rider
-        super().__init__(instance, data, **kwargs)
-
-    def get_passenger_status(self, ride):
-        interactor = GetPassengerInteractor()
-        passenger = interactor.get_passenger(self.rider, ride)
-        if not passenger:
-            return None
-        return passenger.status
 
     class Meta:
         model = Ride
         fields = '__all__'
+        extra_kwargs = {
+            'notification_id': {'write_only': True}
+        }
 
 
 class PassengerPostSerializer(serializers.ModelSerializer):
+    meeting_point = LocationSerializer()
 
     class Meta:
         model = Passenger
         fields = '__all__'
+
+
+class RiderStatusSerializer(serializers.ModelSerializer):
+    passenger = serializers.SerializerMethodField('get_passenger')
+
+    def __init__(self, instance=None, data=..., ride=None, **kwargs):
+        self.ride = ride
+        super().__init__(instance, data, **kwargs)
+
+    def get_passenger(self, rider):
+        ride_service = RideService()
+        passenger = ride_service.get_passenger(self.ride, rider)
+        return PassengerPostSerializer(passenger).data
+
+    class Meta:
+        model = Rider
+        fields = '__all__'
+        extra_kwargs = {
+            'uid': {'write_only': True}
+        }
+
+
+class RidePassengersSerializer(serializers.ModelSerializer):
+    riders = serializers.SerializerMethodField('get_riders')
+    driver = RiderSerializer(read_only=True)
+    starting_point = LocationSerializer(read_only=True)
+    ending_point = LocationSerializer(read_only=True)
+
+    def get_riders(self, ride):
+        ride_service = RideService()
+        riders = ride_service.get_riders(ride)
+        return RiderStatusSerializer(riders, many=True, ride=ride).data
+
+    class Meta:
+        model = Ride
+        fields = '__all__'
+        extra_kwargs = {
+            'notification_id': {'write_only': True}
+        }
