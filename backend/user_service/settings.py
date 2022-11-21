@@ -19,7 +19,8 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '::1',
     'host.docker.internal',
-    '10.0.2.2'
+    '10.0.2.2',
+    'https://caronasuspuserservice-production.up.railway.app/'
 ]
 
 
