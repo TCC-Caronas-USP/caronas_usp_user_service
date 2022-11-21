@@ -1,0 +1,1 @@
+web: pipenv run python manage.py migrate && pipenv run gunicorn -b :8551 user_service.wsgi
