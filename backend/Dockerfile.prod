@@ -2,5 +2,5 @@ FROM python:3.9.6
 
 WORKDIR /usr/src/app
 COPY . ./
-RUN pip install pipenv && pipenv install && pipenv run python manage.py migrate && pipenv run gunicorn -b :8551 user_service.wsgi
+RUN pip install pipenv && pipenv install
 EXPOSE 8551
