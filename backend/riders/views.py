@@ -187,10 +187,15 @@ class PassengerView(ModelViewSet):
         location.save()
         request.data['meeting_point'] = location.id
 
+        ride = self.ride_service.get_ride(request.data['ride'])
+        passenger_count = self.ride_service.get_passenger_count(ride)
+
+        if passenger_count >= ride.max_passengers:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         rider = get_current_rider(request)
         request.data['rider'] = rider.id
 
-        ride = self.ride_service.get_ride(request.data['ride'])
         driver = ride.driver
 
         self.onesignal_service.send_new_passenger_notification(

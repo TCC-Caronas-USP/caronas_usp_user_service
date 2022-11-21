@@ -61,8 +61,15 @@ class RidesSerializer(serializers.ModelSerializer):
         }
 
 
-class PassengerPostSerializer(serializers.ModelSerializer):
+class PassengerGetSerializer(serializers.ModelSerializer):
     meeting_point = LocationSerializer()
+
+    class Meta:
+        model = Passenger
+        fields = '__all__'
+
+
+class PassengerPostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Passenger
@@ -79,7 +86,7 @@ class RiderStatusSerializer(serializers.ModelSerializer):
     def get_passenger(self, rider):
         ride_service = RideService()
         passenger = ride_service.get_passenger(self.ride, rider)
-        return PassengerPostSerializer(passenger).data
+        return PassengerGetSerializer(passenger).data
 
     class Meta:
         model = Rider

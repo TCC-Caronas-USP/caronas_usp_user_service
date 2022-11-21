@@ -44,6 +44,10 @@ class RideService():
         passenger = ride.passenger_set.get(rider=rider.id)
         return passenger
 
+    def get_passenger_count(self, ride):
+        passenger_count = ride.passenger_set.count()
+        return passenger_count
+
 
 class PassengerService():
 
@@ -108,8 +112,9 @@ class OneSignalService():
         driver_first_name = driver.name.split()[0]
         ride_date_string = f"{ride.start_time.day}/{ride.start_time.month}"
         content = f"Infelizmente, {driver_first_name} teve que cancelar a carona do dia {ride_date_string}!"
-        self.send_notification(
-            external_user_ids=external_user_ids, content=content)
+        if external_user_ids:
+            self.send_notification(
+                external_user_ids=external_user_ids, content=content)
 
     def schedule_ride_start_notification(self, ride: Ride,
                                          previous_notification_id=None):
