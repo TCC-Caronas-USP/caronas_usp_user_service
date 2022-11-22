@@ -55,7 +55,8 @@ class RidesSerializer(serializers.ModelSerializer):
     driver = RiderSerializer(read_only=True)
     starting_point = LocationSerializer(read_only=True)
     ending_point = LocationSerializer(read_only=True)
-    passenger_count = serializers.IntegerField(source='get_passenger_count')
+    passenger_count = serializers.IntegerField(
+        source='get_passenger_count', read_only=True)
 
     class Meta:
         model = Ride
