@@ -22,6 +22,9 @@ class RiderUpdateSerializer(serializers.ModelSerializer):
 
 class RiderSerializer(serializers.ModelSerializer):
     vehicles = VehicleSerializer(many=True, read_only=True)
+    rides_as_passenger = serializers.IntegerField(
+        source='get_rides_as_passenger')
+    rides_as_driver = serializers.IntegerField(source='get_rides_as_driver')
 
     class Meta:
         model = Rider

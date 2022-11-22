@@ -45,7 +45,7 @@ class RideService():
         return passenger
 
     def get_passenger_count(self, ride):
-        passenger_count = ride.passenger_set.count()
+        passenger_count = ride.passenger_set.filter(status=2).count()
         return passenger_count
 
 
