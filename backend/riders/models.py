@@ -1,3 +1,4 @@
+from datetime import datetime
 from decimal import Decimal
 
 from django.db import models
@@ -21,6 +22,15 @@ class Rider(models.Model):
     profile_image = models.CharField(
         max_length=255, default="https://i.imgur.com/V4RclNb.png")
     uid = models.CharField(max_length=255, unique=True, blank=False)
+
+    def get_rides_as_passenger(self):
+        passengers = self.passenger_set.filter(
+            status=2, ride__end_time__lte=datetime.now())
+        return passengers.count()
+
+    def get_rides_as_driver(self):
+        rides_as_driver = self.ride_set.filter(end_time__lte=datetime.now())
+        return rides_as_driver.count()
 
 
 class Vehicle(models.Model):
