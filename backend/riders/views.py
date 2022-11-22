@@ -219,6 +219,11 @@ class PassengerView(ModelViewSet):
         if ride.driver.id != request_driver.id:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
+        passenger_count = self.ride_service.get_passenger_count(ride)
+
+        if passenger_count >= ride.max_passengers:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         passenger.status = 2
         passenger.save()
 
