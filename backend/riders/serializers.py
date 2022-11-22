@@ -23,8 +23,9 @@ class RiderUpdateSerializer(serializers.ModelSerializer):
 class RiderSerializer(serializers.ModelSerializer):
     vehicles = VehicleSerializer(many=True, read_only=True)
     rides_as_passenger = serializers.IntegerField(
-        source='get_rides_as_passenger')
-    rides_as_driver = serializers.IntegerField(source='get_rides_as_driver')
+        source='get_rides_as_passenger', read_only=True)
+    rides_as_driver = serializers.IntegerField(
+        source='get_rides_as_driver', read_only=True)
 
     class Meta:
         model = Rider
@@ -54,7 +55,8 @@ class RidesSerializer(serializers.ModelSerializer):
     driver = RiderSerializer(read_only=True)
     starting_point = LocationSerializer(read_only=True)
     ending_point = LocationSerializer(read_only=True)
-    passenger_count = serializers.IntegerField(source='get_passenger_count')
+    passenger_count = serializers.IntegerField(
+        source='get_passenger_count', read_only=True)
 
     class Meta:
         model = Ride
