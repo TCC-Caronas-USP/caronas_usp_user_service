@@ -5,13 +5,6 @@ from django.db import models
 from django.core.validators import MinValueValidator
 
 
-# TODO: Modificações nas classes:
-#   - Rider:
-#       * Corrigir nomenclatura dos Fields
-#       * max_value e min_value no Field year
-#   - Vehicle:
-#       * Corrigir nomenclatura dos Fields
-
 class Rider(models.Model):
     name = models.CharField(max_length=255, blank=False)
     email = models.EmailField(max_length=255, unique=True, blank=False)
@@ -57,12 +50,13 @@ class Ride(models.Model):
     start_time = models.DateTimeField(null=False)
     end_time = models.DateTimeField(null=False)
     price = models.DecimalField(validators=[MinValueValidator(
-        Decimal('0.00'))], max_digits=4, decimal_places=2, null=False)
+        Decimal('0.00'))], max_digits=5, decimal_places=2, null=False)
     max_passengers = models.PositiveIntegerField(null=False)
     notification_id = models.CharField(max_length=255)
 
     def get_passenger_count(self):
-        return self.passenger_set.count()
+        passengers = self.passenger_set.filter(status=2)
+        return passengers.count()
 
 
 class Passenger(models.Model):
